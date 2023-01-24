@@ -10,6 +10,10 @@ webdriver-manager = "*"
 toml = "*"
 
 [dev-packages]
+black = "*"
+isort = "*"
+pylint = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.10"

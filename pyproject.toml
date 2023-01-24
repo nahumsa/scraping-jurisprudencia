@@ -1,0 +1,13 @@
+[tool.pytest.ini_options]
+pythonpath = [
+".", "src/"
+]
+
+[tool.isort]
+profile = "black"
+case_sensitive=true
+
+[tool.pylint.messages_control]
+max-line-length = 110
+
+disable = "C0114, C3001, W0237, W0621, R0903, I1101"
