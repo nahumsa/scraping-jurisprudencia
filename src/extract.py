@@ -21,7 +21,7 @@ def extract_decision_data(
     decision_text = repository.get(reference=x_path_enum.DECISION_TEXT)
     document_href = repository.get(reference=x_path_enum.DOCUMENT_HREF)
 
-    data = DecisionData(
+    return DecisionData(
         process_number=process_number,
         decision_type=decision_type,
         district=district_text,
@@ -33,3 +33,4 @@ def extract_decision_data(
         decision_text=decision_text,
         document_href=document_href,
     )
+
