@@ -1,16 +1,21 @@
 import time
+from enum import Enum
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from webdriver_manager.chrome import ChromeDriverManager
 
-import config
-from repository import DecisionDetailsPageRepository, DecisionXPathOptions
-from search import fill_judgement_end, fill_judgement_start, post_search
+import local_config
 
-configs = config.load()
+from repository import (
+    DecisionDetailsPageRepository,
+    DecisionXPathOptions,
+)
+from search import fill_judgement_end, fill_judgement_start, post_search
+from extract import extract_decision_data
+
+configs = local_config.load()
 
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
@@ -36,28 +41,10 @@ decision.click()
 window_after = driver.window_handles[1]
 driver.switch_to.window(window_after)
 
-
 decision_detail_repository = DecisionDetailsPageRepository(session=driver)
-process_text = decision_detail_repository.get(reference=DecisionXPathOptions.PROCESS)
-justice_secret_text = decision_detail_repository.get(
-    reference=DecisionXPathOptions.JUSTICE_SECRET
-)
-judge_text = decision_detail_repository.get(reference=DecisionXPathOptions.JUDGE)
-judging_body_text = decision_detail_repository.get(
-    reference=DecisionXPathOptions.JUDGING_BODY
-)
-district_text = decision_detail_repository.get(reference=DecisionXPathOptions.DISTRICT)
-judgement_date_text = decision_detail_repository.get(
-    reference=DecisionXPathOptions.JUDGEMENT_DATE
-)
-publication_date_text = decision_detail_repository.get(
-    reference=DecisionXPathOptions.PUBLICATION_DATE
-)
-decision_text = decision_detail_repository.get(
-    reference=DecisionXPathOptions.DECISION_TEXT
-)
-document_href = decision_detail_repository.get(
-    reference=DecisionXPathOptions.DOCUMENT_HREF
+
+data = extract_decision_data(
+    repository=decision_detail_repository, x_path_enum=DecisionXPathOptions
 )
 
-print(process_text)
+print(data)

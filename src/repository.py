@@ -44,6 +44,8 @@ class DecisionDetailsPageRepository(AbstractRepository):
     def get(self, reference: DecisionXPathOptions) -> str:
         match reference:
             case DecisionXPathOptions.DOCUMENT_HREF:
-                return reference.value
+                return self.session.find_element(
+                    By.XPATH, reference.value
+                ).get_attribute("href")
             case _:
                 return self.session.find_element(By.XPATH, reference.value).text
