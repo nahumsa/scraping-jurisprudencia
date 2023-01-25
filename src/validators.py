@@ -84,8 +84,9 @@ class DecisionText(str):
         if not isinstance(v, str):
             raise TypeError("string required")
         split_string = v.split("\n\n")
-        if "Decisão" not in split_string[0]:
-            raise ValueError("wrong text for decision text")
+        # TODO: add validation for base string
+        # if ("Decisão" not in split_string[0]) or ("Ementa" not in split_string[0]):
+        #     raise ValueError("wrong text for decision text")
         return split_string[1]
 
 
