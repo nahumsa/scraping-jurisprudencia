@@ -33,4 +33,3 @@ def extract_decision_data(
         decision_text=decision_text,
         document_href=document_href,
     )
-

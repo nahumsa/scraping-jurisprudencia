@@ -1,6 +1,16 @@
 from pydantic import BaseModel
 
-from validators import DocumentHref, JudgingBody, Judge, District, JusticeSecret, PublicationDate, JudgementDate, DecisionText
+from validators import (
+    DecisionText,
+    District,
+    DocumentHref,
+    Judge,
+    JudgementDate,
+    JudgingBody,
+    JusticeSecret,
+    PublicationDate,
+)
+
 
 class DecisionData(BaseModel):
     process_number: str

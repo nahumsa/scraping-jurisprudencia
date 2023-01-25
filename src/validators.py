@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class PublicationDate(str):
     @classmethod
     def __get_validators__(cls):
