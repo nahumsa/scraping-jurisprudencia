@@ -7,11 +7,11 @@ class PublicationDate(str):
         yield cls.validate
 
     @classmethod
-    def validate(cls, v):
-        if not isinstance(v, str):
+    def validate(cls, value):
+        if not isinstance(value, str):
             raise TypeError("string required")
 
-        split_string = v.split(":  ")
+        split_string = value.split(":  ")
         if split_string[0] != "Fonte/Data da Publicação":
             raise ValueError("wrong text for publication date")
 
@@ -25,11 +25,11 @@ class JudgementDate(str):
         yield cls.validate
 
     @classmethod
-    def validate(cls, v):
-        if not isinstance(v, str):
+    def validate(cls, value):
+        if not isinstance(value, str):
             raise TypeError("string required")
 
-        split_string = v.split(": ")
+        split_string = value.split(": ")
 
         if split_string[0] != "Data do Julgamento":
             raise ValueError("wrong text for judgement date")
@@ -44,8 +44,8 @@ class JusticeSecret:
         yield cls.validate
 
     @classmethod
-    def validate(cls, v) -> bool:
-        split_string = v.split(": ")
+    def validate(cls, value) -> bool:
+        split_string = value.split(": ")
         if split_string[0] != "Segredo de Justiça":
             raise ValueError("wrong text for justice secret")
         match split_string[1]:
@@ -63,11 +63,11 @@ class District(str):
         yield cls.validate
 
     @classmethod
-    def validate(cls, v):
-        if not isinstance(v, str):
+    def validate(cls, value):
+        if not isinstance(value, str):
             raise TypeError("string required")
 
-        split_string = v.split(": ")
+        split_string = value.split(": ")
 
         if split_string[0] != "Comarca":
             raise ValueError("wrong text for district")
@@ -81,10 +81,10 @@ class DecisionText(str):
         yield cls.validate
 
     @classmethod
-    def validate(cls, v):
-        if not isinstance(v, str):
+    def validate(cls, value):
+        if not isinstance(value, str):
             raise TypeError("string required")
-        split_string = v.split("\n\n")
+        split_string = value.split("\n\n")
         # TODO: add validation for base string
         # if ("Decisão" not in split_string[0]) or ("Ementa" not in split_string[0]):
         #     raise ValueError("wrong text for decision text")
@@ -97,10 +97,10 @@ class Judge(str):
         yield cls.validate
 
     @classmethod
-    def validate(cls, v):
-        if not isinstance(v, str):
+    def validate(cls, value):
+        if not isinstance(value, str):
             raise TypeError("string required")
-        split_string = v.split(": ")
+        split_string = value.split(": ")
 
         if "Relator(a)" not in split_string[0]:
             raise ValueError("wrong text for judge")
@@ -114,11 +114,11 @@ class JudgingBody(str):
         yield cls.validate
 
     @classmethod
-    def validate(cls, v):
-        if not isinstance(v, str):
+    def validate(cls, value):
+        if not isinstance(value, str):
             raise TypeError("string required")
 
-        split_string = v.split(": ")
+        split_string = value.split(": ")
 
         if split_string[0] != "Órgão Julgador":
             raise ValueError("wrong text for judging body")
@@ -132,11 +132,11 @@ class DocumentHref(str):
         yield cls.validate
 
     @classmethod
-    def validate(cls, v):
-        if not isinstance(v, str):
+    def validate(cls, value):
+        if not isinstance(value, str):
             raise TypeError("string required")
 
-        split_string = v.split(".replace('")
+        split_string = value.split(".replace('")
 
         if split_string[0] != "javascript:document.location":
             raise ValueError("wrong href text")
