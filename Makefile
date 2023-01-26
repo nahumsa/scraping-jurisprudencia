@@ -5,7 +5,6 @@ tests:
 	pipenv run pytest
 
 lint:
-	cd src/ ; \
 	pipenv run pylint src/ tests/
 
 fmt:

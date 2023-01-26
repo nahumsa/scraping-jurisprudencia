@@ -88,7 +88,7 @@ class DecisionText(str):
         # TODO: add validation for base string
         # if ("Decisão" not in split_string[0]) or ("Ementa" not in split_string[0]):
         #     raise ValueError("wrong text for decision text")
-        return split_string[1]
+        return split_string[1].strip()
 
 
 class Judge(str):

@@ -1,39 +1,16 @@
-from datetime import datetime
+import math
 
 
-class ExecutionError(Exception):
-    pass
+# TODO: group this information in an entity
+def extract_total_number_of_entries(page_information_text: str) -> int:
+    return int(page_information_text.split("registro(s)")[0].strip())
 
 
-page_number = 1
-max_pages = 10
-try:
-    if driver.title == "502 Bad Gateway":
-        raise ExecutionError(
-            f"scrapper received a 502 status code when performing a pagination at page {page_number}"
-        )
+def extract_number_of_entries_per_page(page_information_text: str) -> int:
+    return int(page_information_text.split("até")[1].strip())
 
-except ExecutionError as e:
-    error_json = {
-        "error": {
-            "occured_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "status_code": 502,
-            "message": f"scrapper received a 502 status code when performing a pagination at page {page_number}",
-            "scrapper_state": {
-                "current_page": page_number,
-                "total_of_pages": max_pages,
-                "search_params": {
-                    "judgment_date": {
-                        "start_at": datetime.strptime(
-                            search_start_date, "%d/%m/%Y"
-                        ).strftime("%Y%m%d"),
-                        "end_at": datetime.strptime(
-                            search_end_date, "%d/%m/%Y"
-                        ).strftime("%Y%m%d"),
-                    }
-                },
-            },
-        }
-    }
 
-    raise e
+def extract_max_page_number(
+    total_number_of_entries: int, number_of_entries_per_page: int
+) -> int:
+    return math.ceil(total_number_of_entries / number_of_entries_per_page)
