@@ -18,9 +18,9 @@
 
 # Introdução
 
-Esse repositório consiste em criar um script em python para fazer scraper para  coletar dados de jurisprudência e decisões do Tribunal Jurídico do estado do Paraná (TJPR).
+Esse repositório consiste em criar um script em python para coletar dados de jurisprudência e decisões do Tribunal Jurídico do estado do Paraná (TJPR).
 
-Esses cálculos são muito importantes para fazer jurimetria. Jurimetria consiste em aplicar conceitos de estatística para o Direito.
+Esses cálculos são muito importantes para fazer jurimetria, que consiste em aplicar conceitos de estatística para o Direito.
 
 # Requisitos
 
