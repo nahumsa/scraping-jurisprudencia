@@ -1,4 +1,6 @@
 # pylint: disable=missing-function-docstring
+# pylint: missing-class-docstring
+
 import pandas as pd
 import pytest
 from pydantic import BaseModel
