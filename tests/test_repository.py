@@ -1,6 +1,6 @@
 # pylint: disable=missing-function-docstring
 
-from repository import DecisionXPathOptions
+from repository import MonocraticDecisionXPathOptions
 
 
 def test_decision_xpath_options():
@@ -15,6 +15,6 @@ def test_decision_xpath_options():
         "DECISION_TEXT",
         "DOCUMENT_HREF",
     ]
-    got_fields = [field.name for field in DecisionXPathOptions]
+    got_fields = [field.name for field in MonocraticDecisionXPathOptions]
 
     assert set(expected_fields) == set(got_fields)
