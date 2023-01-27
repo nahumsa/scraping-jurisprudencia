@@ -64,6 +64,7 @@ class AcordaoXPathOptions(Enum):
         "//*[@id='pesquisaForm']/div/table/tbody/tr[3]/td/table[2]/tbody/tr[1]/td[3]/a"
     )
 
+
 class DuvidaXPathOptions(Enum):
 
     PROCESS = "//*[@id='pesquisaForm']/div/table/tbody/tr[3]/td/table[2]/tbody/tr[2]/td"
@@ -80,6 +81,7 @@ class DuvidaXPathOptions(Enum):
     DOCUMENT_HREF = (
         "//*[@id='pesquisaForm']/div/table/tbody/tr[3]/td/table[2]/tbody/tr[1]/td[3]/a"
     )
+
 
 class DecisionDetailsPageRepository(AbstractRepository):
     def __init__(self, session: webdriver) -> None:

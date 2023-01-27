@@ -34,6 +34,7 @@ def extract_decision_data(
         document_href=document_href,
     )
 
+
 def extract_duvida_exame_data(
     repository: AbstractRepository, x_path_enum: Enum
 ) -> DecisionData:

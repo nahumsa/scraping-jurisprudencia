@@ -31,6 +31,5 @@ def get_decision_type(driver: webdriver, number_in_list: int) -> bool:
 
         return decision_type_text.strip()
 
-
     except:
         return False

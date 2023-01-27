@@ -16,10 +16,14 @@ from pagination import (
     get_next_page_element,
     get_page_information_text,
 )
-from repository import DecisionDetailsPageRepository, DuvidaXPathOptions, MonocraticDecisionXPathOptions
+from repository import (
+    DecisionDetailsPageRepository,
+    DuvidaXPathOptions,
+    MonocraticDecisionXPathOptions,
+)
 from search import fill_judgement_end, fill_judgement_start, post_search
 from transforms import convert_model_list_to_dataframe
-from validators.webpage import is_decision_justice_secret, get_decision_type
+from validators.webpage import get_decision_type, is_decision_justice_secret
 
 
 def change_to_window_handle(driver: webdriver, window_position: int) -> None:
