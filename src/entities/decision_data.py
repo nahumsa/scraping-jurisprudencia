@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from validators.entities import (
     DecisionText,
@@ -19,10 +19,10 @@ class DecisionData(BaseModel):
     process_number: str
     decision_type: str
     document_href: DocumentHref
-    judging_body: JudgingBody
-    judge: Judge
-    district: District
-    justice_secret: JusticeSecret
-    publication_date: PublicationDate
     judgement_date: JudgementDate
     decision_text: DecisionText
+    judging_body: JudgingBody = Field(default=None)
+    judge: Judge = Field(default=None)
+    district: District = Field(default=None)
+    justice_secret: JusticeSecret = Field(default=None)
+    publication_date: PublicationDate = Field(default=None)
