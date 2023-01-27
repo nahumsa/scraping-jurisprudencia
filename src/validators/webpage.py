@@ -18,10 +18,9 @@ def is_decision_justice_secret(driver: webdriver, number_in_list: int) -> bool:
         return False
 
 
-def is_decision_monocratic(driver: webdriver, number_in_list: int) -> bool:
-    # TODO: [TECH DEBT] This is a hard coded way to get the monocratic decision.
+def get_decision_type(driver: webdriver, number_in_list: int) -> bool:
     try:
-        is_monocratic_text = (
+        decision_type_text = (
             driver.find_element(
                 By.XPATH,
                 f"/html/body/div/div[3]/div/form/div[2]/div/div/table/tbody/tr[3]/td[2]/table/tbody/tr[{number_in_list + 1}]/td[1]",
@@ -30,10 +29,8 @@ def is_decision_monocratic(driver: webdriver, number_in_list: int) -> bool:
             .split("\n")[-1]
         )
 
-        if is_monocratic_text.strip() == "(Decisão monocrática)":
-            return True
-        else:
-            return False
+        return decision_type_text.strip()
+
 
     except:
         return False

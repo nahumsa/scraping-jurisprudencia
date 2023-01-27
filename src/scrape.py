@@ -8,7 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import load
 import local_config
 from errors import ExecutionError, check_page_error, generate_error_dict
-from extract import extract_decision_data
+from extract import extract_decision_data, extract_duvida_exame_data
 from pagination import (
     extract_max_page_number,
     extract_number_of_entries_per_page,
@@ -16,10 +16,10 @@ from pagination import (
     get_next_page_element,
     get_page_information_text,
 )
-from repository import DecisionDetailsPageRepository, DecisionXPathOptions
+from repository import DecisionDetailsPageRepository, DuvidaXPathOptions, MonocraticDecisionXPathOptions
 from search import fill_judgement_end, fill_judgement_start, post_search
 from transforms import convert_model_list_to_dataframe
-from validators.webpage import is_decision_justice_secret, is_decision_monocratic
+from validators.webpage import is_decision_justice_secret, get_decision_type
 
 
 def change_to_window_handle(driver: webdriver, window_position: int) -> None:
@@ -68,11 +68,12 @@ def main():
 
             for decision_index in range(1, number_of_entries_per_page + 1):
                 is_justice_secret = is_decision_justice_secret(driver, decision_index)
-                is_monocratic = is_decision_monocratic(driver, decision_index)
+                decision_type = get_decision_type(driver, decision_index)
 
                 if not is_justice_secret:
-                    if is_monocratic:
-                        decision_x_path_enum = DecisionXPathOptions
+
+                    if decision_type == "(Decisão monocrática)":
+                        decision_x_path_enum = MonocraticDecisionXPathOptions
 
                         decision = get_decision_element(driver, decision_index)
                         decision.click()
@@ -93,15 +94,36 @@ def main():
 
                         all_data.append(data)
 
-                        decision_detail_df = convert_model_list_to_dataframe(all_data)
+                    elif decision_type == "(Dúvida/exame de competência)":
+                        decision_x_path_enum = DuvidaXPathOptions
 
-                        load.to_csv(
-                            df=decision_detail_df,
-                            base_folder="data",
-                            court_acronym="TJPR",
-                            start_date=search_start_date,
-                            end_date=search_end_date,
+                        decision = get_decision_element(driver, decision_index)
+                        decision.click()
+
+                        change_to_window_handle(driver, 1)
+
+                        decision_detail_repository = DecisionDetailsPageRepository(
+                            session=driver
                         )
+
+                        data = extract_duvida_exame_data(
+                            repository=decision_detail_repository,
+                            x_path_enum=decision_x_path_enum,
+                        )
+
+                        driver.close()
+                        change_to_window_handle(driver, 0)
+
+                        all_data.append(data)
+
+                    decision_detail_df = convert_model_list_to_dataframe(all_data)
+                    load.to_csv(
+                        df=decision_detail_df,
+                        base_folder="data",
+                        court_acronym="TJPR",
+                        start_date=search_start_date,
+                        end_date=search_end_date,
+                    )
 
         except ExecutionError as e:
             error_json = generate_error_dict(
