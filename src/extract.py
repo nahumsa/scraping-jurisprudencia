@@ -1,6 +1,6 @@
 from enum import Enum
 
-from entities import DecisionData
+from entities.decision_data import DecisionData
 from repository import AbstractRepository
 from transforms import transform_process_text
 

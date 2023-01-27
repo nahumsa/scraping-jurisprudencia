@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from validators import (
+from validators.entities import (
     DecisionText,
     District,
     DocumentHref,
