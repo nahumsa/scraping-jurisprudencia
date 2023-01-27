@@ -76,4 +76,4 @@ Tipos de decisões cobertos:
 
 - [X] Decisão monocrática
 - [ ] Acórdão
-- [ ] Dúvida/exame de competência
+- [X] Dúvida/exame de competência
