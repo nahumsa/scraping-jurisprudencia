@@ -1,12 +1,14 @@
 # pylint: disable=missing-function-docstring
-import pytest
 import pandas as pd
-
+import pytest
 from pydantic import BaseModel
-from transforms import transform_process_text, convert_model_list_to_dataframe
+
+from transforms import convert_model_list_to_dataframe, transform_process_text
+
 
 class BaseModelTest(BaseModel):
     test: str
+
 
 class TestTransformProcessText:
     def test_transform_process_text_happy_path(self):

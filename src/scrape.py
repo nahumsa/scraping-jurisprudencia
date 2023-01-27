@@ -13,8 +13,8 @@ from pagination import (
     extract_max_page_number,
     extract_number_of_entries_per_page,
     extract_total_number_of_entries,
-    get_page_information_text,
     get_next_page_element,
+    get_page_information_text,
 )
 from repository import DecisionDetailsPageRepository, DecisionXPathOptions
 from search import fill_judgement_end, fill_judgement_start, post_search
