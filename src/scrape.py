@@ -72,6 +72,7 @@ def main():
 
                 if not is_justice_secret:
 
+                    # TODO: refactor with a mediator design pattern
                     if decision_type == "(Decisão monocrática)":
                         decision_x_path_enum = MonocraticDecisionXPathOptions
 
