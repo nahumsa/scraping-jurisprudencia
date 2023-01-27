@@ -3,7 +3,7 @@ from pydantic import BaseModel
 
 
 def transform_process_text(process_text: str, delimiter: str = "\n") -> tuple[str, str]:
-    """_summary_
+    """Transforms a process text to extract process number and decision.
 
     Args:
         process_text (str): _description_
