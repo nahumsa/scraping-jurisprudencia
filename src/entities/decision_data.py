@@ -13,6 +13,9 @@ from validators.entities import (
 
 
 class DecisionData(BaseModel):
+    """Entity for the decision data, it helds bussiness information and validation for each entry besides `process_number` and `decision_type`. For more information see `validators.entities`."""
+
+    # TODO: add bussiness logic for process number and decision type
     process_number: str
     decision_type: str
     document_href: DocumentHref
