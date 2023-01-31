@@ -2,12 +2,11 @@ import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 import load
 import local_config
-from contexts.new_window import DecisionPageContextManager
+from contexts.new_window_manager import DecisionPageContextManager
 from enums import DuvidaXPathOptions, MonocraticDecisionXPathOptions
 from errors import ExecutionError, check_page_error, generate_error_dict
 from extract import extract_decision_data, extract_duvida_exame_data
@@ -22,19 +21,6 @@ from repositories.decision_details import DecisionDetailsPageRepository
 from search import fill_judgement_end, fill_judgement_start, post_search
 from transforms import convert_model_list_to_dataframe
 from validators.webpage import get_decision_type, is_decision_justice_secret
-
-# def change_to_window_handle(driver: webdriver, window_position: int) -> None:
-#     window = driver.window_handles[window_position]
-#     driver.switch_to.window(window)
-
-
-def get_decision_element(driver: webdriver, number_in_list: int):
-    decision = driver.find_element(
-        By.XPATH,
-        f"/html/body/div/div[3]/div/form/div[2]/div/div/table/tbody/tr[3]/td[2]/table/tbody/tr[{number_in_list + 1}]/td[1]/div[2]/a/div/div",
-    )
-    return decision
-
 
 def main():
     configs = local_config.load()
@@ -74,10 +60,8 @@ def main():
                     # TODO: refactor with a mediator design pattern
                     if decision_type == "(Decisão monocrática)":
                         decision_x_path_enum = MonocraticDecisionXPathOptions
-                        decision = get_decision_element(driver, decision_index)
-                        decision.click()
 
-                        with DecisionPageContextManager(driver):
+                        with DecisionPageContextManager(driver, decision_index):
                             decision_detail_repository = DecisionDetailsPageRepository(
                                 session=driver
                             )
@@ -90,10 +74,8 @@ def main():
 
                     elif decision_type == "(Dúvida/exame de competência)":
                         decision_x_path_enum = DuvidaXPathOptions
-                        decision = get_decision_element(driver, decision_index)
-                        decision.click()
 
-                        with DecisionPageContextManager(driver):
+                        with DecisionPageContextManager(driver, decision_index):
                             decision_detail_repository = DecisionDetailsPageRepository(
                                 session=driver
                             )
