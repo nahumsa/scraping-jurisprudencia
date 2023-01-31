@@ -1,9 +1,5 @@
-from .monocratic_decision import MonocraticDecisionXPathOptions
 from .acordao import AcordaoXPathOptions
 from .duvida import DuvidaXPathOptions
+from .monocratic_decision import MonocraticDecisionXPathOptions
 
-__all__ = [
-    MonocraticDecisionXPathOptions,
-    AcordaoXPathOptions,
-    DuvidaXPathOptions
-]
+__all__ = [MonocraticDecisionXPathOptions, AcordaoXPathOptions, DuvidaXPathOptions]

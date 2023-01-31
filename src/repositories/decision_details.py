@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 
 from .abstract import AbstractRepository
 
+
 class DecisionDetailsPageRepository(AbstractRepository):
     def __init__(self, session: webdriver) -> None:
         self.session = session

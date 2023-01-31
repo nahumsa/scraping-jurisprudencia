@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class DuvidaXPathOptions(Enum):
 
     PROCESS = "//*[@id='pesquisaForm']/div/table/tbody/tr[3]/td/table[2]/tbody/tr[2]/td"
