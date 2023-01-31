@@ -1,6 +1,6 @@
 # pylint: disable=missing-function-docstring
 
-from repository import MonocraticDecisionXPathOptions
+from enums.monocratic_decision import MonocraticDecisionXPathOptions
 
 
 def test_decision_xpath_options():

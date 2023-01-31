@@ -7,6 +7,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 import load
 import local_config
+from contexts.new_window import DecisionPageContextManager
+from enums import DuvidaXPathOptions, MonocraticDecisionXPathOptions
 from errors import ExecutionError, check_page_error, generate_error_dict
 from extract import extract_decision_data, extract_duvida_exame_data
 from pagination import (
@@ -16,19 +18,14 @@ from pagination import (
     get_next_page_element,
     get_page_information_text,
 )
-from repository import (
-    DecisionDetailsPageRepository,
-    DuvidaXPathOptions,
-    MonocraticDecisionXPathOptions,
-)
+from repositories.decision_details import DecisionDetailsPageRepository
 from search import fill_judgement_end, fill_judgement_start, post_search
 from transforms import convert_model_list_to_dataframe
 from validators.webpage import get_decision_type, is_decision_justice_secret
 
-
-def change_to_window_handle(driver: webdriver, window_position: int) -> None:
-    window = driver.window_handles[window_position]
-    driver.switch_to.window(window)
+# def change_to_window_handle(driver: webdriver, window_position: int) -> None:
+#     window = driver.window_handles[window_position]
+#     driver.switch_to.window(window)
 
 
 def get_decision_element(driver: webdriver, number_in_list: int):
@@ -69,57 +66,44 @@ def main():
     for current_page_number in range(1, max_page_number + 1):
         try:
             check_page_error(driver, current_page_number)
-
             for decision_index in range(1, number_of_entries_per_page + 1):
                 is_justice_secret = is_decision_justice_secret(driver, decision_index)
                 decision_type = get_decision_type(driver, decision_index)
 
                 if not is_justice_secret:
-
                     # TODO: refactor with a mediator design pattern
                     if decision_type == "(Decisão monocrática)":
                         decision_x_path_enum = MonocraticDecisionXPathOptions
-
                         decision = get_decision_element(driver, decision_index)
                         decision.click()
 
-                        change_to_window_handle(driver, 1)
+                        with DecisionPageContextManager(driver):
+                            decision_detail_repository = DecisionDetailsPageRepository(
+                                session=driver
+                            )
 
-                        decision_detail_repository = DecisionDetailsPageRepository(
-                            session=driver
-                        )
-
-                        data = extract_decision_data(
-                            repository=decision_detail_repository,
-                            x_path_enum=decision_x_path_enum,
-                        )
-
-                        driver.close()
-                        change_to_window_handle(driver, 0)
-
-                        all_data.append(data)
+                            data = extract_decision_data(
+                                repository=decision_detail_repository,
+                                x_path_enum=decision_x_path_enum,
+                            )
+                            all_data.append(data)
 
                     elif decision_type == "(Dúvida/exame de competência)":
                         decision_x_path_enum = DuvidaXPathOptions
-
                         decision = get_decision_element(driver, decision_index)
                         decision.click()
 
-                        change_to_window_handle(driver, 1)
+                        with DecisionPageContextManager(driver):
+                            decision_detail_repository = DecisionDetailsPageRepository(
+                                session=driver
+                            )
 
-                        decision_detail_repository = DecisionDetailsPageRepository(
-                            session=driver
-                        )
+                            data = extract_duvida_exame_data(
+                                repository=decision_detail_repository,
+                                x_path_enum=decision_x_path_enum,
+                            )
 
-                        data = extract_duvida_exame_data(
-                            repository=decision_detail_repository,
-                            x_path_enum=decision_x_path_enum,
-                        )
-
-                        driver.close()
-                        change_to_window_handle(driver, 0)
-
-                        all_data.append(data)
+                            all_data.append(data)
 
                     decision_detail_df = convert_model_list_to_dataframe(all_data)
                     load.to_csv(
