@@ -25,10 +25,11 @@ from search import fill_judgement_end, fill_judgement_start, post_search
 from transforms import convert_model_list_to_dataframe
 from validators.webpage import get_decision_type, is_decision_justice_secret
 
+from contexts.new_window import DecisionPageContextManager
 
-def change_to_window_handle(driver: webdriver, window_position: int) -> None:
-    window = driver.window_handles[window_position]
-    driver.switch_to.window(window)
+# def change_to_window_handle(driver: webdriver, window_position: int) -> None:
+#     window = driver.window_handles[window_position]
+#     driver.switch_to.window(window)
 
 
 def get_decision_element(driver: webdriver, number_in_list: int):
@@ -83,21 +84,16 @@ def main():
                         decision = get_decision_element(driver, decision_index)
                         decision.click()
 
-                        change_to_window_handle(driver, 1)
+                        with DecisionPageContextManager(driver):
+                            decision_detail_repository = DecisionDetailsPageRepository(
+                                session=driver
+                            )
 
-                        decision_detail_repository = DecisionDetailsPageRepository(
-                            session=driver
-                        )
-
-                        data = extract_decision_data(
-                            repository=decision_detail_repository,
-                            x_path_enum=decision_x_path_enum,
-                        )
-
-                        driver.close()
-                        change_to_window_handle(driver, 0)
-
-                        all_data.append(data)
+                            data = extract_decision_data(
+                                repository=decision_detail_repository,
+                                x_path_enum=decision_x_path_enum,
+                            )
+                            all_data.append(data)
 
                     elif decision_type == "(Dúvida/exame de competência)":
                         decision_x_path_enum = DuvidaXPathOptions
@@ -105,21 +101,17 @@ def main():
                         decision = get_decision_element(driver, decision_index)
                         decision.click()
 
-                        change_to_window_handle(driver, 1)
+                        with DecisionPageContextManager(driver):
+                            decision_detail_repository = DecisionDetailsPageRepository(
+                                session=driver
+                            )
 
-                        decision_detail_repository = DecisionDetailsPageRepository(
-                            session=driver
-                        )
+                            data = extract_duvida_exame_data(
+                                repository=decision_detail_repository,
+                                x_path_enum=decision_x_path_enum,
+                            )
 
-                        data = extract_duvida_exame_data(
-                            repository=decision_detail_repository,
-                            x_path_enum=decision_x_path_enum,
-                        )
-
-                        driver.close()
-                        change_to_window_handle(driver, 0)
-
-                        all_data.append(data)
+                            all_data.append(data)
 
                     decision_detail_df = convert_model_list_to_dataframe(all_data)
                     load.to_csv(
