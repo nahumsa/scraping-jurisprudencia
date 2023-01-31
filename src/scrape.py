@@ -57,7 +57,8 @@ def main():
                 decision_type = get_decision_type(driver, decision_index)
 
                 if not is_justice_secret:
-                    # TODO: refactor with a mediator design pattern
+
+                    # TODO: refactor with a strategy design pattern
                     if decision_type == "(Decisão monocrática)":
                         decision_x_path_enum = MonocraticDecisionXPathOptions
 
