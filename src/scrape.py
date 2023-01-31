@@ -3,6 +3,7 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from contexts.strategy import StrategyContext
 
 import load
 import local_config
@@ -19,6 +20,7 @@ from pagination import (
 )
 from repositories.decision_details import DecisionDetailsPageRepository
 from search import fill_judgement_end, fill_judgement_start, post_search
+from strategy.monocratic_decision import MonocraticDecisionStrategy
 from transforms import convert_model_list_to_dataframe
 from validators.webpage import get_decision_type, is_decision_justice_secret
 
@@ -57,21 +59,13 @@ def main():
                 decision_type = get_decision_type(driver, decision_index)
 
                 if not is_justice_secret:
+                    decision_context = StrategyContext(None)
 
                     # TODO: refactor with a strategy design pattern
                     if decision_type == "(Decisão monocrática)":
                         decision_x_path_enum = MonocraticDecisionXPathOptions
-
-                        with DecisionPageContextManager(driver, decision_index):
-                            decision_detail_repository = DecisionDetailsPageRepository(
-                                session=driver
-                            )
-
-                            data = extract_decision_data(
-                                repository=decision_detail_repository,
-                                x_path_enum=decision_x_path_enum,
-                            )
-                            all_data.append(data)
+                        process_function = extract_decision_data
+                        decision_context.set_strategy(MonocraticDecisionStrategy)
 
                     elif decision_type == "(Dúvida/exame de competência)":
                         decision_x_path_enum = DuvidaXPathOptions
@@ -87,6 +81,19 @@ def main():
                             )
 
                             all_data.append(data)
+
+                    with DecisionPageContextManager(driver, decision_index):
+                        decision_detail_repository = DecisionDetailsPageRepository(
+                            session=driver
+                        )
+
+                        data = decision_context.execute_strategy(
+                            xpath=decision_x_path_enum,
+                            repository=decision_detail_repository,
+                            process_function=process_function
+                            )
+
+                        all_data.append(data)
 
                     decision_detail_df = convert_model_list_to_dataframe(all_data)
                     load.to_csv(
