@@ -69,11 +69,3 @@ pipenv run python src/scrape.py
 ```
 
 Se o scrape da página for sucedido vai gerar um csv na pasta `data` com os dados obtidos através do scrape. Caso não seja sucedido (pode ocorrer de que encontre um erro 502), ele gera um `execution_error.json`.
-
-# TODO
-
-Tipos de decisões cobertos:
-
-- [X] Decisão monocrática
-- [ ] Acórdão
-- [X] Dúvida/exame de competência
