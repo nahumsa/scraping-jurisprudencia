@@ -14,7 +14,6 @@
 - [Rodando o projeto](#rodando-o-projeto)
   - [Utilizando Makefile](#utilizando-makefile)
   - [Utilizando comandos](#utilizando-comandos)
-- [TODO](#todo)
 
 
 # Introdução
